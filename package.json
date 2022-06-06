@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
     "nodemon": "nodemon"
   },
   "author": "Harsh Singh",
@@ -19,8 +20,7 @@
     "mongoose": "^6.3.2"
   },
   "engines": {
-    "node": "16.13.1",
-    "npm": "8.1.2"
+    "node": "16.13.1"
   },
   "devDependencies": {
     "nodemon": "^2.0.16"
