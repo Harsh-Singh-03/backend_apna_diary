@@ -17,7 +17,11 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.3.2"
   },
+  "engines":{
+    "node": "16.13.1"
+  },
   "devDependencies": {
-    "nodemon": "^2.0.16"
+    "nodemon": "^2.0.16",
+    "npm": "8.1.2"
   }
 }
