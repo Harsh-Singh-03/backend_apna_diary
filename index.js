@@ -6,13 +6,13 @@ var cors = require('cors')
 
 connectToMongo();
 const app = express()
-const port = process.env.PORT || 3000
+const port = process.env.PORT || 8000
 
 app.use(cors())
 
-// app.get('/', (req, res) => {
-//   res.send('Hello harsh!')
-// })
+app.get('/', (req, res) => {
+  res.send('Hello harsh!')
+})
 app.use(express.json())
 app.use("/api/auth", require('./routes/auth'))
 app.use("/api/notes", require('./routes/notes'))
