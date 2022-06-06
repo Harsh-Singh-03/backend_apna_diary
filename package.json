@@ -18,10 +18,11 @@
     "mongoose": "^6.3.2"
   },
   "engines":{
-    "node": "16.13.1"
+    "node": "16.13.1",
+    "npm": "8.1.2"
   },
   "devDependencies": {
-    "nodemon": "^2.0.16",
-    "npm": "8.1.2"
+    "nodemon": "^2.0.16"
+    
   }
 }
