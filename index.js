@@ -9,6 +9,11 @@ const app = express()
 const port = process.env.PORT || 8000;
 
 app.use(cors())
+//  app.use(cors({
+//      origin: "https://apnaa--diary.herokuapp.com",
+//      optionsSuccessStatus: 200,
+//      methods: "GET,PUT,POST, DELETE"
+//  }))
 
 app.get('/', (req, res) => {
   res.send('Hello harsh!')

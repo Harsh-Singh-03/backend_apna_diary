@@ -9,6 +9,7 @@ router.get('/fetchallnotes',fetchUser, async (req,res)=>{
     try {
         // search by user id which define in notes schema or fetchuser function and fetching that id wise notes
         const notes = await Notes.find({user: req.user.id})
+        console.log(notes)
         res.json(notes)
     } catch (error) {
         console.error(error.message);
