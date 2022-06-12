@@ -1,7 +1,7 @@
-// mongodb+srv://harsh_singh:<password>@cluster0.e49ur.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
 
 const connectToMongo =require('./db')
 const express = require('express')
+require('dotenv/config')
 var cors = require('cors')
 
 connectToMongo();
@@ -9,11 +9,11 @@ const app = express()
 const port = process.env.PORT || 8000;
 
 // app.use(cors())
-app.use(cors({
-  origin: "https://apnaa--diary.herokuapp.com",
-  optionsSuccessStatus: 200,
-  methods: "GET,PUT,POST, DELETE"
-}))
+ app.use(cors({
+     origin: process.env.ACCESS_URL,
+     optionsSuccessStatus: 200,
+     methods: "GET,PUT,POST, DELETE"
+ }))
 
 app.get('/', (req, res) => {
   res.send('Hello harsh!')
