@@ -21,6 +21,7 @@ const UserSchema = new Schema({
     },
     otp:{
         type: String,
+        default: "",
         required: true
     }
 });

@@ -156,6 +156,10 @@ router.post('/login', [
             success= false;
             return res.status(400).json({success, error: "log in with correct email and passwords" })
         }
+        if(user.otp === null || user.otp === ""){
+            success= false;
+            return res.status(400).json({success, error: "Something Goes Wrong" })
+        }
         // compare pass with bcrypt.compare function to users enter pass with database pass hash
         const passCompare = await bcrypt.compare(password, user.password)
         //   if not matched then return error
