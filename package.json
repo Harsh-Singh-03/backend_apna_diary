@@ -22,7 +22,9 @@
     "express-validator": "^6.14.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.3.2",
-    "nodemon": "^2.0.16"
+    "nodemailer": "^6.7.5",
+    "nodemon": "^2.0.16",
+    "otp-generator": "^4.0.0"
   },
   "engines": {
     "node": "16.13.1"

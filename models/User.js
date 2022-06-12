@@ -18,6 +18,10 @@ const UserSchema = new Schema({
     date:{
         type: Date,
         default: Date.now
+    },
+    otp:{
+        type: String,
+        required: true
     }
 });
 const User = mongoose.model('user', UserSchema);

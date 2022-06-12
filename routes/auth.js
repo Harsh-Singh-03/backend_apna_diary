@@ -2,10 +2,13 @@ const express = require('express')
 const User = require('../models/User')
 const router = express.Router()
 const { body, validationResult } = require('express-validator');
+const otpGenerator = require('otp-generator')
+var nodemailer = require('nodemailer');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+require('dotenv/config')
 const fetchUser = require('../middleware/fetchUser')
-const JWT_SECRET = "Iamharsh$singhbaby"
+const JWT_SECRET = process.env.JWT_SIGN;
 // creating user
 router.post('/singup', [
     // first checking email user and pass are valid
@@ -35,19 +38,85 @@ router.post('/singup', [
         if(req.body.password !== req.body.Cpassword){
             success = false
             return res.status(400).json({ success, error: "Sorry! check your confirm password" })
-        }
+        }       
         // if not then create scure pass with bcryptjs hash and salt
         const salt = await bcrypt.genSalt(10)
         const securePass = await bcrypt.hash(req.body.password, salt);
         const secureCPass = await bcrypt.hash(req.body.Cpassword, salt);
-        // adding to database
+        
+        // try to create otp first
+        const OTP = otpGenerator.generate(6, { lowerCaseAlphabets: false,upperCaseAlphabets: false, specialChars: false });
+        // after creating OTP have send user that OTP in mail
+        const SecureOTP = await bcrypt.hash(OTP, salt);
+        var transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+              user: process.env.USER_EMAIL,
+              pass: process.env.USER_PASS
+            }
+          });
+          var mailOptions = {
+            from: process.env.USER_EMAIL,
+            to: req.body.email,
+            subject: 'From Apna Diary',
+            html: `<h4>Welcome To Apna Diary Here is Your <strong> OTP :${OTP} </strong> for verification your Gmail.</h4>`
+          };
+          transporter.sendMail(mailOptions, function(error, info){
+            if (error) {
+              console.log(error);
+            } else {
+              console.log('Email sent: ' + info.response);
+            }
+          });
+        // adding to databaset
         user = await User.create({
             name: req.body.name,
             password: securePass,
             Cpassword: secureCPass,
             email: req.body.email,
+            otp: SecureOTP
         })
         // and giving auth token with JWT token
+        // const data = {
+        //     user: {
+        //         id: user.id
+        //     }
+        // }
+
+        // const authToken = jwt.sign(data, JWT_SECRET);
+        // console.log(authToken)
+        success = true;
+        // res.json(user)
+        res.json({success, user })
+
+    } catch (e) {
+        success = false;
+        // console.error(e.message);
+        res.status(500).send({success, error: "Sorry! Internal server error"})
+    }
+    //   .then(user => res.json(user))
+    //   .catch(err=> {console.log(err),
+    //   res.json({error: "please enter valid email"})})
+    // console.log(user);
+
+
+})
+//verify the email and give acces token
+router.post('/verifygmail',[], async(req, res)=>{
+    let success = false;
+    const { email, otp } = req.body;
+    try {
+        const user = await User.findOne({ email })
+        if (!user) {
+            success= false;
+            return res.status(400).json({success, error: "Please Check your Email" })
+        }
+        const OTPCompare = await bcrypt.compare(otp, user.otp)
+        if(!OTPCompare){
+            success= false;
+            return res.status(400).json({success, error: "OTP Incorrect Please Check!" })
+        }
+            //    and giving auth token with JWT token
         const data = {
             user: {
                 id: user.id
@@ -55,24 +124,15 @@ router.post('/singup', [
         }
 
         const authToken = jwt.sign(data, JWT_SECRET);
-        // console.log(authToken)
+        console.log(authToken)
         success = true;
         // res.json(user)
         res.json({success, authToken })
-
     } catch (e) {
         success = false;
         // console.error(e.message);
         res.status(500).send({success, error: "Sorry! Internal server error"})
     }
-
-
-    //   .then(user => res.json(user))
-    //   .catch(err=> {console.log(err),
-    //   res.json({error: "please enter valid email"})})
-    // console.log(user);
-
-
 })
 // log in user
 router.post('/login', [

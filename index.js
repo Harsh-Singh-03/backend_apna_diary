@@ -2,6 +2,7 @@
 
 const connectToMongo =require('./db')
 const express = require('express')
+require('dotenv/config')
 var cors = require('cors')
 
 connectToMongo();
@@ -10,7 +11,7 @@ const port = process.env.PORT || 8000;
 
 app.use(cors())
 //  app.use(cors({
-//      origin: "https://apnaa--diary.herokuapp.com",
+//      origin: process.env.ACCESS_URL,
 //      optionsSuccessStatus: 200,
 //      methods: "GET,PUT,POST, DELETE"
 //  }))
