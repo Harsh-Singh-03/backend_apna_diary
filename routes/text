@@ -1,0 +1,9 @@
+DB_URL=mongodb+srv://harsh_singh:harshdata143@cluster0.e49ur.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
+
+ACCESS_URL=https://apnaa--diary.herokuapp.com
+
+JWT_SIGN=Iamharsh$singhbaby
+
+USER_EMAIL=harshnov802@gmail.com
+
+USER_PASS=paczlpldmolwzapr
