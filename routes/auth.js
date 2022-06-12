@@ -102,7 +102,7 @@ router.post('/singup', [
 
 })
 //verify the email and give acces token
-router.post('/verifygmail',[], async(req, res)=>{
+router.post('/verifygmail', async (req, res)=>{
     let success = false;
     const { email, otp } = req.body;
     try {
