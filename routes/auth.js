@@ -59,7 +59,7 @@ router.post('/singup', [
             from: process.env.USER_EMAIL,
             to: req.body.email,
             subject: 'From Apna Diary',
-            html: `<h2>Welcome To Apna Diary Here is Your<br> <h1 style={color: "blue"}><b> OTP :${OTP} </b></h1> <br> for Email Verification.</h2>`
+            html: `<h2>Welcome To Apna Diary Here is Your <br> <h1><b> OTP :${OTP} </b></h1> <br> for Email Verification.</h2>`
           };
           transporter.sendMail(mailOptions, function(error, info){
             if (error) {
