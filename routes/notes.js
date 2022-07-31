@@ -16,6 +16,17 @@ router.get('/fetchallnotes',fetchUser, async (req,res)=>{
     }
 
 })
+router.get('/fetchfavnotes',fetchUser, async (req,res)=>{
+    try {
+        // search by user id which define in notes schema or fetchuser function and fetching that id wise notes
+        const notes = await Notes.find({fav: req.user.id})
+        res.json(notes)
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).send("some error occured")
+    }
+
+})
 // push all notes from loged in user
 router.post('/addnotes',fetchUser,[
     // define validation for titl and description
@@ -29,9 +40,9 @@ router.post('/addnotes',fetchUser,[
     }
     try {
         // getting title des and tag from req body and save it to database and also send it to a response json
-        const {title, description, tag} =req.body;
+        const {title, description, tag, fav} =req.body;
         const note = new Notes({
-            title,description,tag, user: req.user.id
+            title,description,tag, fav, user: req.user.id
         })
         const savedNote = await note.save(); 
         res.json(savedNote)
@@ -95,6 +106,47 @@ router.delete('/deletenotes/:id',fetchUser, async (req,res)=>{
         res.json({"success": "your note has been deleted ", note: note})
 
     }catch (error) {
+        console.error(error.message);
+        res.status(500).send("some error occured")
+    }
+})
+
+// ndpoint for adding fav notes 
+router.put('/favnotes/:id',fetchUser, async (req, res)=>{
+    try {
+        let note = await Notes.findById(req.params.id)
+        if(!note){
+           return res.status(404).send({error: "not found"})
+        }
+        if(note.user.toString() === req.user.id){
+            note.fav= note.user;
+           const newnote = await Notes.findByIdAndUpdate(req.params.id, {$set:note}, {new:true})
+            res.json({newnote})
+        }
+        else{
+            return res.status(401).send({error: "not allowed"})
+        }
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).send("some error occured")
+    }
+})
+// removing from favrate
+router.put('/removenotes/:id',fetchUser, async (req, res)=>{
+    try {
+        let note = await Notes.findById(req.params.id)
+        if(!note){
+           return res.status(404).send({error: "not found"})
+        }
+        if(note.user.toString() === req.user.id){
+            note.fav= "";
+           const newnote = await Notes.findByIdAndUpdate(req.params.id, {$set:note}, {new:true})
+            res.json({newnote})
+        }
+        else{
+            return res.status(401).send({error: "not allowed"})
+        }
+    } catch (error) {
         console.error(error.message);
         res.status(500).send("some error occured")
     }

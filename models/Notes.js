@@ -17,6 +17,10 @@ const NotesSchema = new Schema({
     tag:{
         type: String
     },
+    fav:{
+        type: String,
+        default: ""
+    },
     date:{
         type: Date,
         default: Date.now
